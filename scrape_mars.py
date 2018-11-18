@@ -1,6 +1,7 @@
 
 # Dependencies
 from flask import Flask, redirect, render_template
+import pymongo
 from bs4 import BeautifulSoup as bs
 import pandas as pd
 import requests
@@ -10,7 +11,11 @@ import re
 
 app = Flask(__name__)
 
-app.config["MONGO_URI"] = "mongodb://localhost:27017/Mars_db"
+conn = 'mongodb://localhost:27017'
+client = pymongo.MongoClient(conn)
+MarsDB = client.MarsDB
+
+
 
 mongo = PyMongo(app)
 
