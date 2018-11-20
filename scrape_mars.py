@@ -17,7 +17,7 @@ MarsDB = client.MarsDB
 
 
 
-mongo = PyMongo(app)
+# mongo = PyMongo(app)
 
 #############################################################
 # Flask Setup
@@ -30,7 +30,7 @@ app = Flask(__name__)
 @app.route("/")
 def welcome():
     return (
-        f"<strong>Welcome to the Mar's Informational Page</strong>"
+    #     f"<strong>Welcome to the Mar's Informational Page</strong>"
     )
 
 
@@ -38,7 +38,7 @@ def welcome():
 #############################################################
 # Flast /Scrape
 #############################################################
-@app.route(/scrape)
+@app.route("/scrape")
 def scrape():
 
     ### URL's to be scraped
@@ -59,7 +59,7 @@ def scrape():
     facts_url = 'https://space-facts.com/mars/'
 
     # Mars Hemisphere Image - create a dictionary with the image url string and the hemisphere title to a list (more details below)
-    Hems_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    Hems_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
     usgsStart = "https://astrogeology.usgs.gov"
 
     # Splinter Path
@@ -202,4 +202,7 @@ def scrape():
     # Mars Table (html)
     ScrapeDict["marsHTML"] = marsHTML
 
-    return jsonify(ScrapeDict)
+    # return jsonify(ScrapeDict)
+
+
+
