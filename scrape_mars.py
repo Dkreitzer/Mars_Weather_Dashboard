@@ -8,16 +8,7 @@ import requests
 from splinter import Browser
 import lxml.html
 import re
-
-app = Flask(__name__)
-
-conn = 'mongodb://localhost:27017'
-client = pymongo.MongoClient(conn)
-MarsDB = client.MarsDB
-
-
-
-# mongo = PyMongo(app)
+import datetime
 
 #############################################################
 # Flask Setup
@@ -25,20 +16,26 @@ MarsDB = client.MarsDB
 app = Flask(__name__)
 
 #############################################################
-# Flask Home Page
+# Setup Mongo connection
 #############################################################
-@app.route("/")
-def welcome():
-    return (
-    #     f"<strong>Welcome to the Mar's Informational Page</strong>"
-    )
-
-
+conn = 'mongodb://localhost:27017'
+client = pymongo.MongoClient(conn)
 
 #############################################################
-# Flast /Scrape
+# Declare the collection
 #############################################################
-@app.route("/scrape")
+#  first, delete an existing db if one exists
+client.drop_database('MarsDB')
+
+# Create new empty DB that will hold current scrape
+MarsDB = client.MarsDB
+
+# Create collection (called scraped results) within the MarsDB database
+collection = MarsDB.scraped_Results
+
+#############################################################
+# Define Scrape Function
+#############################################################
 def scrape():
 
     ### URL's to be scraped
@@ -59,7 +56,7 @@ def scrape():
     facts_url = 'https://space-facts.com/mars/'
 
     # Mars Hemisphere Image - create a dictionary with the image url string and the hemisphere title to a list (more details below)
-    Hems_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+    # Hems_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
     usgsStart = "https://astrogeology.usgs.gov"
 
     # Splinter Path
@@ -188,7 +185,7 @@ def scrape():
     #### Create Dictionary
     ScrapeDict = dict(zip(HemisphereTitles, HemisphereLinks))
    
-    # NASA Feature Title, Teaser, 
+    #### NASA Feature Title, Teaser, 
     ScrapeDict['featured_title'] = featured_title
     ScrapeDict["featured_teaser"] = featured_teaser
     ScrapeDict["featured_link"] = featured_link
@@ -202,7 +199,77 @@ def scrape():
     # Mars Table (html)
     ScrapeDict["marsHTML"] = marsHTML
 
+    # datetime timestamp
+    ScrapeDict["timestamp"] = datetime.datetime.utcnow()
     # return jsonify(ScrapeDict)
 
+    #############################################################
+    # Update Mongo database. First delete if exists, create db, create collection, insert into collection
+    #############################################################
+    #  first, delete an existing db if one exists
+    client.drop_database('MarsDB')
 
+    # Create new empty DB that will hold current scrape
+    MarsDB = client.MarsDB
+
+    # Create collection (called scraped results) within the MarsDB database
+    collection = MarsDB.scraped_Results
+
+    # Insert current dictionary into the mongo db
+    collection.insert_one(ScrapeDict)
+
+#############################################################
+# Flask Home Page
+#############################################################
+@app.route("/")
+def welcome():
+    mongoCurrent = collection.find()
+    for key in mongoCurrent:
+        featured_title = key['featured_title']
+        featured_teaser = key['featured_teaser']
+        featured_link = key['featured_link']
+        featured_image_url = key['featured_image_url']
+        mars_weather = key['mars_weather']
+        marsHTML = key['marsHTML']
+        timestamp = key['timestamp']
+        cerberusLink= key['Cerberus Hemisphere Enhanced']
+        SyrtisLink= key['Schiaparelli Hemisphere Enhanced']
+        schiapLink= key['Syrtis Major Hemisphere Enhanced']
+        VallesLink= key['Valles Marineris Hemisphere Enhanced']
+
+    cerberusTitle = 'Cerberus Hemisphere Enhanced'
+    SyrtisTitle = 'Schiaparelli Hemisphere Enhanced'
+    schiapTitle = 'Syrtis Major Hemisphere Enhanced'
+    VallesTitle = 'Valles Marineris Hemisphere Enhanced'
+
+    return render_template('index.html', featured_title = featured_title,
+                                        featured_teaser = featured_teaser,
+                                        featured_link = featured_link,
+                                        featured_image_url = featured_image_url,
+                                        mars_weather = mars_weather,
+                                        marsHTML = marsHTML,
+                                        timestamp = timestamp,
+                                        cerberusLink= cerberusLink,
+                                        SyrtisLink= SyrtisLink,
+                                        schiapLink= schiapLink,
+                                        VallesLink= VallesLink,
+                                        cerberusTitle = cerberusTitle,
+                                        SyrtisTitle = SyrtisTitle,
+                                        schiapTitle = schiapTitle,
+                                        VallesTitle = VallesTitle
+                                        )
+
+# 
+
+#############################################################
+# Flask / Scrape Function
+#############################################################
+@app.route("/scrape")
+def scrapeNow():
+    scrape()
+
+    return redirect("/")
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
