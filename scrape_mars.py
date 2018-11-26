@@ -181,9 +181,18 @@ def scrape():
     HemisphereTitles.append(VallesTitle)
     HemisphereLinks.append(VallesLink)
 
+    #### Create List of Dictionaries for Hemispheres
+    hemisphere_image_urls = []
+    hemisphere_image_urls.append({"title":cerberusTitle, "img_url":cerberusLink})
+    hemisphere_image_urls.append({"title":schiapTitle, "img_url":schiapLink})
+    hemisphere_image_urls.append({"title":SyrtisTitle, "img_url":SyrtisLink})
+    hemisphere_image_urls.append({"title":VallesTitle, "img_url":VallesLink})
+
     ###############################################################################################
     #### Create Dictionary
-    ScrapeDict = dict(zip(HemisphereTitles, HemisphereLinks))
+    ScrapeDict = {}
+    # Add  list of hemisphere dictionaries to ScrapeDict
+    ScrapeDict = {'hemisphere_images': hemisphere_image_urls}
    
     #### NASA Feature Title, Teaser, 
     ScrapeDict['featured_title'] = featured_title
@@ -232,15 +241,8 @@ def welcome():
         mars_weather = key['mars_weather']
         marsHTML = key['marsHTML']
         timestamp = key['timestamp']
-        cerberusLink= key['Cerberus Hemisphere Enhanced']
-        SyrtisLink= key['Schiaparelli Hemisphere Enhanced']
-        schiapLink= key['Syrtis Major Hemisphere Enhanced']
-        VallesLink= key['Valles Marineris Hemisphere Enhanced']
+        hemisphere_img = key['hemisphere_images']
 
-    cerberusTitle = 'Cerberus Hemisphere Enhanced'
-    SyrtisTitle = 'Schiaparelli Hemisphere Enhanced'
-    schiapTitle = 'Syrtis Major Hemisphere Enhanced'
-    VallesTitle = 'Valles Marineris Hemisphere Enhanced'
 
     return render_template('index.html', featured_title = featured_title,
                                         featured_teaser = featured_teaser,
@@ -249,14 +251,7 @@ def welcome():
                                         mars_weather = mars_weather,
                                         marsHTML = marsHTML,
                                         timestamp = timestamp,
-                                        cerberusLink= cerberusLink,
-                                        SyrtisLink= SyrtisLink,
-                                        schiapLink= schiapLink,
-                                        VallesLink= VallesLink,
-                                        cerberusTitle = cerberusTitle,
-                                        SyrtisTitle = SyrtisTitle,
-                                        schiapTitle = schiapTitle,
-                                        VallesTitle = VallesTitle
+                                        hemisphere = hemisphere_img
                                         )
 
 # 

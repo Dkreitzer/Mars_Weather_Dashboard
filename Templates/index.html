@@ -50,19 +50,20 @@
         </div>
       </div>
     </div>  
-    
-<div class="row">
-    
-    <div class col-md-6 col-sm-12 col-xs-12>
-    <img class="img" src={{cerberusLink}} title={{cerberusTitle}}>
-    </div>
-    
-     <div class col-md-6 col-sm-12 col-xs-12>
-    <img class="img" src={{schiapLink}} title={{schiapTitle}}>
-    </div>
-    
-    </div>
 
+    
+{% for moon in hemisphere%}
+    <div class="row">
+
+        <div class col-md-6 col-sm-12 col-xs-12>
+        <img class="img" src={{moon['img_url']}} title={{moon['title']}}>
+        </div>
+
+
+        </div>
+    {%endfor%}
+
+<!--
 <div class="row">
     
     <div class col-md-6 col-sm-12 col-xs-12>
@@ -74,6 +75,7 @@
     </div>
     
     </div>
+-->
     
     
     
