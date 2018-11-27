@@ -34,12 +34,12 @@
     </div>
  
   <div class = "row">
-    <div class = "col-lg-7 col-md-7 col-sm-12 col-xs-12">
+    <div class = "col-lg-6 col-md-6 col-sm-12 col-xs-12">
       <h2>Featured Image of Mars from NASA</h2>
         <img class = img src = {{mongoCurrent.featured_image_url}} height = 400px>
       </div>
     
-      <div class = "col-lg-5 col-md-5 col-sm-12 col-xs-12">
+      <div class = "col-lg-6 col-md-6 col-sm-12 col-xs-12">
       
         <div class="container">
             <h3>The current weather on mars is: <br></h3>
@@ -52,35 +52,37 @@
         </div>
       </div>
     </div>  
+<br><br>
 
-<!--This is the moon hemisphere section. The moon titles and images were saved as a list in the ScrapedDict under the key hemisphere-->
-{% for moon in mongoCurrent.hemisphere%}
+    
+    
+    <!--This is the moon hemisphere section. The moon titles and images were saved as a list in the ScrapedDict under the key hemisphere-->
+
+    
+    <div class = "container">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <h3>Mars Hemispheres</h3>
+    </div>
+        
+{% for object in mongoCurrent.hemisphere_images%}
     <div class="row">
 
-        <div class col-md-6 col-sm-12 col-xs-12>
-        <img class="img" src={{moon['img_url']}} title={{moon['title']}}>
+        <div class= "col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4>{{object['title']}}</h4><br>
+                    <img class="img" src={{object['img_url']}} height="400px">
+                </div>
+                
+            </div>
+        
         </div>
 
 
         </div>
     {%endfor%}
+</div>
 
-<!--
-<div class="row">
-    
-    <div class col-md-6 col-sm-12 col-xs-12>
-    <img class="img" src={{SyrtisLink}} title={{SyrtisTitle}}>
-    </div>
-    
-     <div class col-md-6 col-sm-12 col-xs-12>
-    <img class="img" src={{VallesLink}} title={{VallesTitle}}>
-    </div>
-    
-    </div>
--->
-    
-    
-    
 <!--    this is the div-container closing-->
     </div>      
     </body>
