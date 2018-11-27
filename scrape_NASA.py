@@ -100,8 +100,8 @@ def scrape():
         td = tr.find_all('td')
         row = [tr.text for tr in td]
         dataList.append(row)
-    marsDF = pd.DataFrame(dataList, columns=["A", "B"])
-    marsHTML = marsDF.to_html()
+    marsDF = pd.DataFrame(dataList, columns=[" ", " "])
+    marsHTML = marsDF.to_html(index=False)
     
     ###############################################################################################
     ######### Images of Mars Hemispheres ###############
