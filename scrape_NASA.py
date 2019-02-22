@@ -93,7 +93,9 @@ def scrape():
     html = browser.html
     soup = bs(html, 'lxml-xml')
     tableraw = soup.find('table', attrs={'id':'tablepress-mars'})
-    table_rows = tableraw.find_all('tr')
+    tablebody = tableraw.tbody
+
+    table_rows = tablebody.find_all('tr')
 
     dataList = []
     for tr in table_rows:
